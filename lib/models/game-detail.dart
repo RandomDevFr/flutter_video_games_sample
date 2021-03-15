@@ -1,17 +1,17 @@
 class GameDetail {
-  String description;
-  String name;
-  String backgroundImage;
-  String backgroundImageAdditional;
+  final String description;
+  final String name;
+  final String backgroundImage;
+  final String backgroundImageAdditional;
 
-  GameDetail({this.description, this.name, this.backgroundImage, this.backgroundImageAdditional});
+  GameDetail(this.description, this.name, this.backgroundImage, this.backgroundImageAdditional);
 
   factory GameDetail.fromJson(Map<String, dynamic> json) {
     return GameDetail(
-      description: json['description'],
-      name: json['name'],
-      backgroundImage: json['background_image'],
-      backgroundImageAdditional: json['background_image_additional'],
+      json['description'] ?? '',
+      json['name'] ?? '',
+      json['background_image'] ?? '',
+      json['background_image_additional'] ?? '',
     );
   }
 }

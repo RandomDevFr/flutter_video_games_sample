@@ -19,14 +19,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Future<List<VideoGame>> fetchVideoGames() async {
     const gamesUrl = 'https://api.rawg.io/api/games';
-    final response = await http.get(gamesUrl);
+    final response = await http.get(Uri.parse(gamesUrl));
     if (response.statusCode == 200) {
       return VideoGameResponse.fromJson(json.decode(response.body))
           .results
           .take(10)
           .toList();
     } else {
-      return List<VideoGame>();
+      return <VideoGame>[];
     }
   }
 
@@ -53,8 +53,8 @@ class _MyAppState extends State<MyApp> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData &&
-                      snapshot.data.length > 0) {
-                    final videos = snapshot.data;
+                      snapshot.data!.length > 0) {
+                    final videos = snapshot.data!;
                     return ListView.builder(
                       padding: EdgeInsets.all(0.0),
                       itemCount: videos.length,
@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
-                              return GameDetailWidget(id: videos[index].id);
+                              return GameDetailWidget(videos[index].id);
                             }));
                           },
                           child: GameCardWidget(video: videos[index]),

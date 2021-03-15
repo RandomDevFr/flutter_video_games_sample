@@ -1,15 +1,15 @@
 class VideoGame {
-  int id;
-  String name;
-  String backgroundImage;
+  final int id;
+  final String name;
+  final String backgroundImage;
 
-  VideoGame({this.id, this.name, this.backgroundImage});
+  VideoGame(this.id, this.name, this.backgroundImage);
 
   factory VideoGame.fromJson(Map<String, dynamic> json) {
     return VideoGame(
-      id: json['id'],
-      name: json['name'],
-      backgroundImage: json['background_image'],
+      json['id'] ?? 0,
+      json['name'] ?? '',
+      json['background_image'] ?? '',
     );
   }
 }

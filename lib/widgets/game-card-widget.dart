@@ -3,8 +3,8 @@ import 'package:video_games/models/video-game.dart';
 
 class GameCardWidget extends StatelessWidget {
   const GameCardWidget({
-    Key key,
-    @required this.video,
+    Key? key,
+    required this.video,
   }) : super(key: key);
 
   final VideoGame video;

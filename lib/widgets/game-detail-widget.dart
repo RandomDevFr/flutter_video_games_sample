@@ -8,16 +8,16 @@ import 'package:video_games/models/theme-model.dart';
 
 class GameDetailWidget extends StatelessWidget {
   final int id;
-  GameDetailWidget({@required this.id});
+  GameDetailWidget(this.id);
 
-  Future<GameDetail> fetchGameDetail() async {
+  Future<GameDetail?> fetchGameDetail() async {
     final gamesUrl = 'https://api.rawg.io/api/games/$id';
-    final response = await http.get(gamesUrl);
+    final response = await http.get(Uri.parse((gamesUrl)));
     if (response.statusCode == 200) {
       String source = Utf8Decoder().convert(response.bodyBytes);
       return GameDetail.fromJson(jsonDecode(source));
     } else {
-      return GameDetail();
+      return null;
     }
   }
 
@@ -31,7 +31,7 @@ class GameDetailWidget extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
-              final gameDetail = snapshot.data;
+              final gameDetail = snapshot.data as GameDetail;
               return Column(
                 children: <Widget>[
                   Container(
@@ -68,11 +68,13 @@ class GameDetailWidget extends StatelessWidget {
                           left: 16.0, right: 16.0, bottom: 16.0),
                       width: double.infinity,
                       height: 60.0,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                          primary: Theme.of(context).primaryColor,
                         ),
-                        color: Theme.of(context).primaryColor,
                         onPressed: () {
                           theme.toggle();
                         },
