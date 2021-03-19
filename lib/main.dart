@@ -55,27 +55,57 @@ class _MyAppState extends State<MyApp> {
                       snapshot.hasData &&
                       snapshot.data!.length > 0) {
                     final videos = snapshot.data!;
-                    return ListView.builder(
-                      padding: EdgeInsets.all(0.0),
-                      itemCount: videos.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) {
-                              return GameDetailWidget(videos[index].id);
-                            }));
-                          },
-                          child: GameCardWidget(video: videos[index]),
-                        );
+                    return LayoutBuilder(builder: (context, constraints) {
+                      if (constraints.maxWidth > 600) {
+                        var columnsNumber = 2;
+                        if (constraints.maxWidth > 900) {
+                          columnsNumber = 3;
+                        }
+                        return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: columnsNumber,
+                            ),
+                            itemCount: videos.length,
+                            itemBuilder: (context, index) {
+                              return GestureGameCardWidget(
+                                  video: videos[index]);
+                            });
                       }
-                    );
+                      return ListView.builder(
+                          padding: EdgeInsets.all(0.0),
+                          itemCount: videos.length,
+                          itemBuilder: (context, index) {
+                            return GestureGameCardWidget(video: videos[index]);
+                          });
+                    });
                   }
                   return Container();
                 }),
           ),
         ),
       ),
+    );
+  }
+}
+
+class GestureGameCardWidget extends StatelessWidget {
+  const GestureGameCardWidget({
+    Key? key,
+    required this.video,
+  }) : super(key: key);
+
+  final VideoGame video;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) {
+          return GameDetailWidget(video.id);
+        }));
+      },
+      child: GameCardWidget(video: video),
     );
   }
 }
